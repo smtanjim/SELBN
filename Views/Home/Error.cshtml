@@ -1,0 +1,33 @@
+@{
+    Layout = null;
+    int code = ViewBag.Code ?? 404;
+    string title = code == 403 ? "Access Denied (Unauthorized Role)" : "Page Not Found";
+    string message = ViewBag.Message ?? "The requested page could not be found.";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Error @code – SEL</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<div class="error-page">
+  <div class="error-card">
+    <div class="code">@code</div>
+    <h2>@title</h2>
+    <p>@message</p>
+    @if (User.Identity?.IsAuthenticated == true)
+    {
+      <a class="btn-link" href="/dashboard">Return to My Dashboard</a>
+    }
+    else
+    {
+      <a class="btn-link" href="/login">Back to Sign In</a>
+    }
+  </div>
+</div>
+<script src="/js/main.js"></script>
+</body>
+</html>

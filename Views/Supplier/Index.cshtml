@@ -1,0 +1,54 @@
+@{
+    Layout = null;
+    string name = ViewBag.CurrentUser?.Name ?? "Supplier";
+    string email = ViewBag.CurrentUser?.Email ?? "";
+    string roleLabel = ViewBag.RoleLabel ?? "Supplier";
+    string initial = name.Substring(0, 1).ToUpper();
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Supplier Dashboard – SEL</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<div class="dash">
+  <aside class="sidebar">
+    <div class="brand">S<em>E</em>L</div>
+    <nav class="nav">
+      <a class="active" data-target="overview">📊 Overview</a>
+      <a data-target="auth-test">🔐 Role Authorization Test</a>
+    </nav>
+    <div class="logout"><a href="/logout" class="btn-logout">Log out</a></div>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <div><h1>Welcome, @name</h1><p class="sub">@roleLabel Dashboard (@email)</p></div>
+      <div class="user-chip"><div class="avatar">@initial</div><div><strong>@name</strong><small>@roleLabel</small></div></div>
+    </div>
+
+    <section id="overview" class="stats">
+      <div class="stat-card"><small>Authentication Status</small><strong>Verified Cookie</strong></div>
+      <div class="stat-card"><small>Authorized Role</small><strong>@roleLabel</strong></div>
+      <div class="stat-card"><small>Active Route</small><strong>/supplier</strong></div>
+    </section>
+
+    <section id="auth-test" class="card">
+      <div class="card-head"><h3>Role-Based Authorization Check</h3></div>
+      <p>Click any restricted route below to verify that your <strong>@roleLabel</strong> account receives a <strong>403 Access Denied</strong> response:</p>
+      <div class="role-links">
+        <a class="role-pill" href="/customer">/customer (403 Block)</a>
+        <a class="role-pill" href="/supplier">/supplier (Allowed)</a>
+        <a class="role-pill" href="/sales">/sales (403 Block)</a>
+        <a class="role-pill" href="/accounts">/accounts (403 Block)</a>
+        <a class="role-pill" href="/admin">/admin (403 Block)</a>
+      </div>
+    </section>
+  </main>
+</div>
+<script src="/js/main.js"></script>
+</body>
+</html>
