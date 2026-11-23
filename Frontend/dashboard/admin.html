@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin Dashboard – SEL</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<div class="dash">
+  <aside class="sidebar">
+    <div class="brand">S<em>E</em>L</div>
+    <nav class="nav">
+      <a class="active" data-target="overview">📊 Overview</a>
+      <a data-target="users">👥 Users</a>
+    </nav>
+    <div class="logout"><button id="logoutBtn" class="btn-logout">Log out</button></div>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <div><h1 id="hello">Welcome</h1><p class="sub">Administrator Dashboard</p></div>
+      <div class="user-chip"><div class="avatar" id="avatar">?</div><div><strong id="userName">…</strong><small id="userRole"></small></div></div>
+    </div>
+
+    <section id="overview"><div class="stats" id="stats"></div></section>
+
+    <section id="users" class="card">
+      <div class="card-head"><h3>All Users</h3><input id="userSearch" class="search" placeholder="Search users…"></div>
+      <table>
+        <thead><tr><th>ID</th><th>Name</th><th>Email</th><th>Role</th><th>Phone</th><th>Joined</th></tr></thead>
+        <tbody id="userBody"></tbody>
+      </table>
+    </section>
+  </main>
+</div>
+<script src="../js/main.js"></script>
+<script>
+  // Columns match the `users` table in schema.sql
+  initDashboard({
+    role: "admin",
+    statsUrl: API.admin.stats,
+    statDefs: [
+      { key: "totalUsers", label: "Total Users" },
+      { key: "customers", label: "Customers" },
+      { key: "suppliers", label: "Suppliers" },
+      { key: "staff", label: "Staff Accounts" }
+    ],
+    tables: [{
+      url: API.admin.users, bodyId: "userBody", searchId: "userSearch",
+      columns: [
+        { key: "id" }, { key: "name" }, { key: "email" },
+        { key: "role", render: v => badge(String(v).replace("_", " ")) },
+        { key: "phone" },
+        { key: "created_at", render: v => esc(String(v || "").slice(0, 10)) }
+      ]
+    }]
+  });
+</script>
+</body>
+</html>

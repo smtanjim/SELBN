@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Accounts Dashboard – SEL</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<div class="dash">
+  <aside class="sidebar">
+    <div class="brand">S<em>E</em>L</div>
+    <nav class="nav">
+      <a class="active" data-target="overview">📊 Overview</a>
+      <a data-target="invoices">🧾 Invoices</a>
+    </nav>
+    <div class="logout"><button id="logoutBtn" class="btn-logout">Log out</button></div>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <div><h1 id="hello">Welcome</h1><p class="sub">Accounts Officer Dashboard</p></div>
+      <div class="user-chip"><div class="avatar" id="avatar">?</div><div><strong id="userName">…</strong><small id="userRole"></small></div></div>
+    </div>
+
+    <section id="overview"><div class="stats" id="stats"></div></section>
+
+    <section id="invoices" class="card">
+      <div class="card-head"><h3>Invoices &amp; Payments</h3><input id="invSearch" class="search" placeholder="Search invoices…"></div>
+      <table>
+        <thead><tr><th>Invoice #</th><th>Party</th><th>Due Date</th><th>Amount</th><th>Status</th></tr></thead>
+        <tbody id="invBody"></tbody>
+      </table>
+    </section>
+  </main>
+</div>
+<script src="../js/main.js"></script>
+<script>
+  initDashboard({
+    role: "accounts_officer",
+    statsUrl: API.accounts.stats,
+    statDefs: [
+      { key: "totalInvoices", label: "Total Invoices" },
+      { key: "received", label: "Payments Received", money: true },
+      { key: "outstanding", label: "Outstanding", money: true },
+      { key: "overdue", label: "Overdue Invoices" }
+    ],
+    tables: [{
+      url: API.accounts.invoices, bodyId: "invBody", searchId: "invSearch",
+      columns: [
+        { key: "id" }, { key: "party" }, { key: "dueDate" },
+        { key: "amount", render: v => money(v) },
+        { key: "status", render: v => badge(v) }
+      ]
+    }]
+  });
+</script>
+</body>
+</html>

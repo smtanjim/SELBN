@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Supplier Dashboard – SEL</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<div class="dash">
+  <aside class="sidebar">
+    <div class="brand">S<em>E</em>L</div>
+    <nav class="nav">
+      <a class="active" data-target="overview">📊 Overview</a>
+      <a data-target="products">🔧 My Products</a>
+    </nav>
+    <div class="logout"><button id="logoutBtn" class="btn-logout">Log out</button></div>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <div><h1 id="hello">Welcome</h1><p class="sub">Supplier Dashboard</p></div>
+      <div class="user-chip"><div class="avatar" id="avatar">?</div><div><strong id="userName">…</strong><small id="userRole"></small></div></div>
+    </div>
+
+    <section id="overview"><div class="stats" id="stats"></div></section>
+
+    <section id="products" class="card">
+      <div class="card-head"><h3>Supplied Products</h3><input id="prodSearch" class="search" placeholder="Search products…"></div>
+      <table>
+        <thead><tr><th>Product</th><th>Category</th><th>Stock</th><th>Unit Price</th><th>Status</th></tr></thead>
+        <tbody id="prodBody"></tbody>
+      </table>
+    </section>
+  </main>
+</div>
+<script src="../js/main.js"></script>
+<script>
+  initDashboard({
+    role: "supplier",
+    statsUrl: API.supplier.stats,
+    statDefs: [
+      { key: "totalProducts", label: "Products Listed" },
+      { key: "openOrders", label: "Open Purchase Orders" },
+      { key: "delivered", label: "Delivered" },
+      { key: "revenue", label: "Total Revenue", money: true }
+    ],
+    tables: [{
+      url: API.supplier.products, bodyId: "prodBody", searchId: "prodSearch",
+      columns: [
+        { key: "name" }, { key: "category" }, { key: "stock" },
+        { key: "price", render: v => money(v) },
+        { key: "status", render: v => badge(v) }
+      ]
+    }]
+  });
+</script>
+</body>
+</html>

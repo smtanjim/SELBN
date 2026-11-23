@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Customer Dashboard – SEL</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<div class="dash">
+  <aside class="sidebar">
+    <div class="brand">S<em>E</em>L</div>
+    <nav class="nav">
+      <a class="active" data-target="overview">📊 Overview</a>
+      <a data-target="orders">📦 My Orders</a>
+    </nav>
+    <div class="logout"><button id="logoutBtn" class="btn-logout">Log out</button></div>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <div><h1 id="hello">Welcome</h1><p class="sub">Customer Dashboard</p></div>
+      <div class="user-chip"><div class="avatar" id="avatar">?</div><div><strong id="userName">…</strong><small id="userRole"></small></div></div>
+    </div>
+
+    <section id="overview"><div class="stats" id="stats"></div></section>
+
+    <section id="orders" class="card">
+      <div class="card-head"><h3>My Orders</h3><input id="orderSearch" class="search" placeholder="Search orders…"></div>
+      <table>
+        <thead><tr><th>Order #</th><th>Product / Service</th><th>Date</th><th>Amount</th><th>Status</th></tr></thead>
+        <tbody id="ordersBody"></tbody>
+      </table>
+    </section>
+  </main>
+</div>
+<script src="../js/main.js"></script>
+<script>
+  initDashboard({
+    role: "customer",
+    statsUrl: API.customer.stats,
+    statDefs: [
+      { key: "totalOrders", label: "Total Orders" },
+      { key: "pendingOrders", label: "Pending Orders" },
+      { key: "deliveredOrders", label: "Delivered" },
+      { key: "totalSpent", label: "Total Spent", money: true }
+    ],
+    tables: [{
+      url: API.customer.orders, bodyId: "ordersBody", searchId: "orderSearch",
+      columns: [
+        { key: "id" }, { key: "item" }, { key: "date" },
+        { key: "amount", render: v => money(v) },
+        { key: "status", render: v => badge(v) }
+      ]
+    }]
+  });
+</script>
+</body>
+</html>
